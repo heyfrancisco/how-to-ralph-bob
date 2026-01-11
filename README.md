@@ -304,6 +304,16 @@ chmod +x ralph.sh
 ./ralph.sh 5
 ```
 
+### The --yolo Flag
+
+The script uses Bob-Shell's `--yolo` flag, which automatically accepts all prompts without requiring user confirmation. This is essential for the Ralph Wiggum Technique because:
+
+- **Autonomous Operation**: Allows the script to run multiple iterations without manual intervention
+- **Continuous Flow**: Enables the AI to work through tasks sequentially without pausing
+- **True Automation**: Makes the Ralph loop fully automated as intended
+
+**Important**: The `--yolo` flag means Bob will execute all tool calls automatically. Ensure your `plan.md` is well-defined and your project is in a safe state (e.g., committed to git) before running Ralph.
+
 ---
 
 ## Prompt Engineering

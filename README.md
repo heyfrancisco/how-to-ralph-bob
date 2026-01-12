@@ -138,8 +138,8 @@ Ralph Wiggum's character embodies simplicity and unexpected wisdom. Similarly, t
 2. **Project Structure**
    ```
    your-project/
-   ├── plan.md              # Your project plan/PRD
-   ├── progress.txt         # Progress tracking file
+   ├── plan.md              # Create Your project plan/PRD
+   ├── progress.txt         # Create Progress tracking file
    ├── ralph.sh             # The Ralph loop script
    └── [your project files]
    ```

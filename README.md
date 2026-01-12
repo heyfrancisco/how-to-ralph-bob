@@ -33,7 +33,6 @@ Each iteration:
 
 The key improvement here is that the **agent chooses the task, not you.**
 
----
 
 ## How It Works
 
@@ -101,7 +100,6 @@ The key improvement here is that the **agent chooses the task, not you.**
               [Next Iteration or Exit]
 ```
 
----
 
 ## Implementation with Bob-Shell
 
@@ -156,7 +154,7 @@ The key improvement here is that the **agent chooses the task, not you.**
    ---
    ```
 
----
+
 
 ## The Ralph Loop Script
 
@@ -292,7 +290,6 @@ The script uses Bob-Shell's `--yolo` flag, which automatically accepts all promp
 
 **Important**: The `--yolo` flag means Bob will execute all tool calls automatically. Ensure your `plan.md` is well-defined and your project is in a safe state (e.g., committed to git) before running Ralph.
 
----
 
 ## Prompt Engineering
 
@@ -352,7 +349,6 @@ The Ralph prompt has six key components:
 - Prevents over-iteration
 - Signals success
 
----
 
 ## Best Practices
 
@@ -456,7 +452,6 @@ If iterations are too small or too large:
 - Add more specific acceptance criteria
 - Emphasize "single feature" more strongly
 
----
 
 ## Troubleshooting
 
@@ -577,7 +572,6 @@ If iterations are too small or too large:
    git rebase -i HEAD~10  # Interactive rebase to clean up
    ```
 
----
 
 ## Examples
 
@@ -587,7 +581,6 @@ See the `/examples/` folder for detailed examples:
 - [Example 2: React Component Library](examples/02-react-component-library.md)
 - [Example 3: Database Migration](examples/03-database-migration.md)
 
----
 
 ## Comparison: Traditional vs Ralph
 
@@ -622,7 +615,6 @@ bob "Final review"
 # One script, one prompt, automatic execution
 ./ralph.sh 15
 ```
----
 
 ## Tips for Success
 

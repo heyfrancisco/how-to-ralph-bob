@@ -1,6 +1,10 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
+import yaml from 'js-yaml';
+import fs from 'fs';
+import path from 'path';
 import userRoutes from './routes/userRoutes';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { logger } from './utils/logger';
@@ -37,6 +41,16 @@ export function createApp(): Application {
       timestamp: new Date().toISOString(),
     });
   });
+
+  // Swagger API documentation
+  try {
+    const openApiPath = path.join(__dirname, '../docs/openapi.yaml');
+    const openApiDocument = yaml.load(fs.readFileSync(openApiPath, 'utf8'));
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocument as object));
+    logger.info('Swagger UI available at /api-docs');
+  } catch (error) {
+    logger.error('Failed to load OpenAPI specification', { error });
+  }
 
   // API routes
   app.use('/api/users', userRoutes);

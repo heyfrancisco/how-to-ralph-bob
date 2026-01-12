@@ -1,0 +1,550 @@
+openapi: 3.0.3
+info:
+  title: User Management REST API
+  description: |
+    A production-ready REST API for user management with full CRUD operations,
+    validation, error handling, and comprehensive documentation.
+    
+    ## Features
+    - Complete CRUD operations for user management
+    - Input validation with detailed error messages
+    - Pagination support for listing users
+    - Proper HTTP status codes and error handling
+    - Security headers and CORS support
+    
+    ## Authentication
+    This API currently does not require authentication (demo purposes).
+    
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+  - url: https://api.example.com
+    description: Production server
+
+tags:
+  - name: Users
+    description: User management operations
+  - name: Health
+    description: Health check endpoints
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Health check
+      description: Returns the health status of the API
+      operationId: healthCheck
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: '2026-01-12T10:30:00.000Z'
+
+  /api/users:
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      description: Creates a new user with the provided information
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+            examples:
+              withAge:
+                summary: User with age
+                value:
+                  email: john.doe@example.com
+                  firstName: John
+                  lastName: Doe
+                  age: 30
+              withoutAge:
+                summary: User without age
+                value:
+                  email: jane.smith@example.com
+                  firstName: Jane
+                  lastName: Smith
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              example:
+                success: true
+                data:
+                  id: 550e8400-e29b-41d4-a716-446655440000
+                  email: john.doe@example.com
+                  firstName: John
+                  lastName: Doe
+                  age: 30
+                  createdAt: '2026-01-12T10:30:00.000Z'
+                  updatedAt: '2026-01-12T10:30:00.000Z'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    get:
+      tags:
+        - Users
+      summary: List all users
+      description: Returns a paginated list of all users, sorted by creation date (newest first)
+      operationId: listUsers
+      parameters:
+        - name: page
+          in: query
+          description: Page number (starts at 1)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          example: 1
+        - name: pageSize
+          in: query
+          description: Number of users per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          example: 10
+      responses:
+        '200':
+          description: List of users retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+              examples:
+                withUsers:
+                  summary: List with users
+                  value:
+                    success: true
+                    data:
+                      users:
+                        - id: 550e8400-e29b-41d4-a716-446655440000
+                          email: john.doe@example.com
+                          firstName: John
+                          lastName: Doe
+                          age: 30
+                          createdAt: '2026-01-12T10:30:00.000Z'
+                          updatedAt: '2026-01-12T10:30:00.000Z'
+                        - id: 660e8400-e29b-41d4-a716-446655440001
+                          email: jane.smith@example.com
+                          firstName: Jane
+                          lastName: Smith
+                          createdAt: '2026-01-12T10:25:00.000Z'
+                          updatedAt: '2026-01-12T10:25:00.000Z'
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                        totalItems: 2
+                        totalPages: 1
+                emptyList:
+                  summary: Empty list
+                  value:
+                    success: true
+                    data:
+                      users: []
+                      pagination:
+                        page: 1
+                        pageSize: 10
+                        totalItems: 0
+                        totalPages: 0
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user by ID
+      description: Returns a single user by their unique identifier
+      operationId: getUserById
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              example:
+                success: true
+                data:
+                  id: 550e8400-e29b-41d4-a716-446655440000
+                  email: john.doe@example.com
+                  firstName: John
+                  lastName: Doe
+                  age: 30
+                  createdAt: '2026-01-12T10:30:00.000Z'
+                  updatedAt: '2026-01-12T10:30:00.000Z'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - Users
+      summary: Update user
+      description: Updates an existing user. All fields are optional. Omitted fields will not be changed.
+      operationId: updateUser
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+            examples:
+              fullUpdate:
+                summary: Update all fields
+                value:
+                  email: john.updated@example.com
+                  firstName: Jonathan
+                  lastName: Doe-Smith
+                  age: 31
+              partialUpdate:
+                summary: Update only email
+                value:
+                  email: new.email@example.com
+              removeAge:
+                summary: Remove age field
+                value:
+                  age: null
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              example:
+                success: true
+                data:
+                  id: 550e8400-e29b-41d4-a716-446655440000
+                  email: john.updated@example.com
+                  firstName: Jonathan
+                  lastName: Doe-Smith
+                  age: 31
+                  createdAt: '2026-01-12T10:30:00.000Z'
+                  updatedAt: '2026-01-12T10:35:00.000Z'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      description: Permanently deletes a user from the system
+      operationId: deleteUser
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '204':
+          description: User deleted successfully (no content)
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  parameters:
+    UserId:
+      name: id
+      in: path
+      description: Unique identifier of the user (UUID v4)
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 550e8400-e29b-41d4-a716-446655440000
+
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - firstName
+        - lastName
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier (UUID v4)
+          example: 550e8400-e29b-41d4-a716-446655440000
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: john.doe@example.com
+        firstName:
+          type: string
+          minLength: 2
+          maxLength: 50
+          description: User's first name
+          example: John
+        lastName:
+          type: string
+          minLength: 2
+          maxLength: 50
+          description: User's last name
+          example: Doe
+        age:
+          type: integer
+          minimum: 1
+          maximum: 150
+          nullable: true
+          description: User's age (optional)
+          example: 30
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user was created
+          example: '2026-01-12T10:30:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user was last updated
+          example: '2026-01-12T10:30:00.000Z'
+
+    CreateUserRequest:
+      type: object
+      required:
+        - email
+        - firstName
+        - lastName
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: john.doe@example.com
+        firstName:
+          type: string
+          minLength: 2
+          maxLength: 50
+          description: User's first name
+          example: John
+        lastName:
+          type: string
+          minLength: 2
+          maxLength: 50
+          description: User's last name
+          example: Doe
+        age:
+          type: integer
+          minimum: 1
+          maximum: 150
+          nullable: true
+          description: User's age (optional)
+          example: 30
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+          example: john.updated@example.com
+        firstName:
+          type: string
+          minLength: 2
+          maxLength: 50
+          description: User's first name
+          example: Jonathan
+        lastName:
+          type: string
+          minLength: 2
+          maxLength: 50
+          description: User's last name
+          example: Doe-Smith
+        age:
+          type: integer
+          minimum: 1
+          maximum: 150
+          nullable: true
+          description: User's age (set to null to remove)
+          example: 31
+
+    Pagination:
+      type: object
+      required:
+        - page
+        - pageSize
+        - totalItems
+        - totalPages
+      properties:
+        page:
+          type: integer
+          minimum: 1
+          description: Current page number
+          example: 1
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 100
+          description: Number of items per page
+          example: 10
+        totalItems:
+          type: integer
+          minimum: 0
+          description: Total number of items
+          example: 42
+        totalPages:
+          type: integer
+          minimum: 0
+          description: Total number of pages
+          example: 5
+
+    UserResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+          example: true
+        data:
+          $ref: '#/components/schemas/User'
+
+    UserListResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+          example: true
+        data:
+          type: object
+          required:
+            - users
+            - pagination
+          properties:
+            users:
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+
+    Error:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          description: Always false for errors
+          example: false
+        error:
+          type: object
+          required:
+            - message
+          properties:
+            message:
+              type: string
+              description: Human-readable error message
+              example: Validation failed
+            details:
+              type: array
+              description: Detailed validation errors (if applicable)
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    description: Field that failed validation
+                    example: email
+                  message:
+                    type: string
+                    description: Validation error message
+                    example: Invalid email format
+            stack:
+              type: string
+              description: Stack trace (only in development mode)
+              example: 'Error: Validation failed\n    at ...'
+
+  responses:
+    ValidationError:
+      description: Validation error - invalid input data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error:
+              message: Validation failed
+              details:
+                - field: email
+                  message: Invalid email format
+                - field: firstName
+                  message: String must contain at least 2 character(s)
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error:
+              message: User not found
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            success: false
+            error:
+              message: Internal server error

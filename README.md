@@ -14,6 +14,8 @@
 
 ---
 
+![Ralph Coding](ralph-coding.png)
+
 ## Introduction
 
 The **Ralph Wiggum Technique** is a AI methodology that runs agents in a continuous loop with a **single prompt**, allowing the AI to self-organize, prioritize, and execute tasks autonomously. This approach eliminates the need for phase-specific prompts and lets the AI work naturally through iterative cycles.

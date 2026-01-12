@@ -110,12 +110,14 @@ export class UserController {
 
       res.status(200).json({
         success: true,
-        data: result.users,
-        pagination: {
-          page: result.page,
-          pageSize: result.pageSize,
-          total: result.total,
-          totalPages: result.totalPages,
+        data: {
+          users: result.users,
+          pagination: {
+            page: result.page,
+            pageSize: result.pageSize,
+            total: result.total,
+            totalPages: result.totalPages,
+          },
         },
       });
     } catch (error) {

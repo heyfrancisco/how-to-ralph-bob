@@ -230,3 +230,72 @@
 - Write integration tests for API endpoints
 - Test all 5 CRUD endpoints with HTTP requests
 - Achieve 90%+ overall test coverage
+
+---
+
+## Iteration 4: Integration Tests for API Endpoints (Phase 3b)
+**Date**: 2026-01-12
+**Status**: ✅ Complete
+
+### What was implemented:
+
+1. **Comprehensive Integration Test Suite (`tests/integration/userRoutes.test.ts`)**
+   - Created 27 integration tests covering all API endpoints
+   - Test coverage includes:
+     - **POST /api/users**: 7 tests (valid data, optional fields, trimming, validation errors)
+     - **GET /api/users/:id**: 2 tests (found, not found)
+     - **GET /api/users**: 7 tests (empty list, pagination, sorting, validation)
+     - **PUT /api/users/:id**: 6 tests (full update, partial update, trimming, validation, not found, null handling)
+     - **DELETE /api/users/:id**: 3 tests (successful deletion, not found, count tracking)
+     - **Health Check**: 1 test (endpoint availability)
+     - **404 Handler**: 1 test (undefined routes)
+
+2. **Bug Fixes and Improvements**
+   - **App Export**: Added default export of app instance for testing compatibility
+   - **Response Structure**: Fixed GET /api/users to return nested structure with `data.users` and `data.pagination`
+   - **Validation Schema**: Added `.trim()` to email field in Zod schemas for consistent trimming
+   - **Nullable Age**: Added `.nullable()` to age field in update schema to support removing optional fields
+   - **Service Layer**: Updated `updateUser` to convert `null` to `undefined` for User interface compatibility
+   - **Health Check Response**: Changed to match expected format (`status: 'ok'` instead of `success: true`)
+   - **Error Message Casing**: Fixed 404 error message to use lowercase "not found" for consistency
+
+### Decisions made:
+- Used `supertest` for HTTP request testing (industry standard for Express testing)
+- Structured tests by endpoint with descriptive test names
+- Used `beforeEach` to clear user data for test isolation
+- Tested both success and error paths for all endpoints
+- Validated response structure, status codes, and data integrity
+- Used `null` in request body to remove optional age field (JSON-compatible)
+
+### Issues encountered and resolved:
+1. **Module Export Error**: App had no default export - Added default export alongside named export
+2. **Response Structure Mismatch**: Tests expected nested data structure - Fixed controller to return `data: { users, pagination }`
+3. **Trimming Not Applied**: Email field wasn't trimmed by Zod - Added `.trim()` before `.email()` validation
+4. **Null Age Handling**: TypeScript error with null age - Added `.nullable()` to schema and conversion logic in service
+5. **Health Check Format**: Response didn't match test expectations - Updated to use `status: 'ok'`
+6. **Error Message Casing**: 404 error used "Not found" - Changed to lowercase "not found"
+7. **Undefined vs Null**: JSON doesn't support undefined - Used `null` in tests and converted to `undefined` in service
+
+### Validation:
+- ✅ All 57 tests passing (30 unit + 27 integration)
+- ✅ All 5 CRUD endpoints tested with success and error cases
+- ✅ Input validation tested on all endpoints
+- ✅ Proper HTTP status codes verified (200, 201, 204, 400, 404)
+- ✅ Pagination functionality tested
+- ✅ Health check and 404 handler tested
+- ✅ TypeScript compilation successful
+- ✅ ESLint passed with no errors
+
+### Test Coverage Results:
+- **Overall**: 84.57% statements, 69.56% branches, 83.97% lines, 88.63% functions
+- **Fully Covered**: app.ts, user.ts, userRoutes.ts, userService.ts (100%)
+- **Needs Improvement**: 
+  - errorHandler.ts: 30.43% (error handling paths not tested)
+  - logger.ts: 73.91% (different log levels not tested)
+  - userController.ts: 87.27% (some error paths not covered)
+
+### Next steps:
+- Improve test coverage to reach 90%+ threshold
+- Add tests for error handler middleware
+- Add tests for logger utility with different log levels
+- Cover remaining error paths in controller

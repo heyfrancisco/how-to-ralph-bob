@@ -21,18 +21,19 @@ export interface User {
 export const createUserSchema = z.object({
   email: z
     .string()
+    .trim()
     .email('Invalid email format')
     .min(1, 'Email is required'),
   firstName: z
     .string()
+    .trim()
     .min(2, 'First name must be at least 2 characters')
-    .max(50, 'First name must not exceed 50 characters')
-    .trim(),
+    .max(50, 'First name must not exceed 50 characters'),
   lastName: z
     .string()
+    .trim()
     .min(2, 'Last name must be at least 2 characters')
-    .max(50, 'Last name must not exceed 50 characters')
-    .trim(),
+    .max(50, 'Last name must not exceed 50 characters'),
   age: z
     .number()
     .int('Age must be an integer')
@@ -48,26 +49,28 @@ export const createUserSchema = z.object({
 export const updateUserSchema = z.object({
   email: z
     .string()
+    .trim()
     .email('Invalid email format')
     .optional(),
   firstName: z
     .string()
+    .trim()
     .min(2, 'First name must be at least 2 characters')
     .max(50, 'First name must not exceed 50 characters')
-    .trim()
     .optional(),
   lastName: z
     .string()
+    .trim()
     .min(2, 'Last name must be at least 2 characters')
     .max(50, 'Last name must not exceed 50 characters')
-    .trim()
     .optional(),
   age: z
     .number()
     .int('Age must be an integer')
     .min(1, 'Age must be at least 1')
     .max(150, 'Age must not exceed 150')
-    .optional(),
+    .optional()
+    .nullable(),
 });
 
 /**

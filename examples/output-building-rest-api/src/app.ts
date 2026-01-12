@@ -33,8 +33,7 @@ export function createApp(): Application {
   // Health check endpoint
   app.get('/health', (_req, res) => {
     res.status(200).json({
-      success: true,
-      message: 'Server is healthy',
+      status: 'ok',
       timestamp: new Date().toISOString(),
     });
   });
@@ -50,3 +49,7 @@ export function createApp(): Application {
 
   return app;
 }
+
+// Export default app instance for testing
+const app = createApp();
+export default app;

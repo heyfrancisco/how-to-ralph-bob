@@ -151,8 +151,8 @@ export class UserService {
       return null;
     }
 
-    // Trim string fields if provided
-    const trimmedData: UpdateUserDto = {};
+    // Trim string fields if provided and handle null age
+    const trimmedData: Partial<User> = {};
     if ('email' in updateData) {
       trimmedData.email = updateData.email?.trim();
     }
@@ -163,7 +163,8 @@ export class UserService {
       trimmedData.lastName = updateData.lastName?.trim();
     }
     if ('age' in updateData) {
-      trimmedData.age = updateData.age;
+      // Convert null to undefined for User interface compatibility
+      trimmedData.age = updateData.age === null ? undefined : updateData.age;
     }
 
     const updatedUser: User = {

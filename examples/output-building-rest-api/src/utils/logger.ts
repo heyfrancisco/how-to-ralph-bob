@@ -11,11 +11,12 @@ export enum LogLevel {
 }
 
 class Logger {
-  private logLevel: LogLevel;
-
-  constructor() {
+  /**
+   * Get current log level from environment
+   */
+  private getLogLevel(): LogLevel {
     const envLogLevel = process.env.LOG_LEVEL?.toUpperCase() || 'INFO';
-    this.logLevel = LogLevel[envLogLevel as keyof typeof LogLevel] || LogLevel.INFO;
+    return LogLevel[envLogLevel as keyof typeof LogLevel] || LogLevel.INFO;
   }
 
   /**
@@ -32,7 +33,7 @@ class Logger {
    */
   private shouldLog(level: LogLevel): boolean {
     const levels = [LogLevel.ERROR, LogLevel.WARN, LogLevel.INFO, LogLevel.DEBUG];
-    const currentLevelIndex = levels.indexOf(this.logLevel);
+    const currentLevelIndex = levels.indexOf(this.getLogLevel());
     const messageLevelIndex = levels.indexOf(level);
     return messageLevelIndex <= currentLevelIndex;
   }

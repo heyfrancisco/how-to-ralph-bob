@@ -396,3 +396,83 @@ All files          |   96.27 |     94.2 |     100 |   96.13 |
 - Integrate Swagger UI at /api-docs
 - Write comprehensive README
 - Phase 5: Final production polish and validation
+
+
+
+---
+
+## Iteration 6: API Documentation with Swagger UI (Phase 4)
+**Date**: 2026-01-12
+**Status**: ✅ Complete
+
+### What was implemented:
+
+1. **OpenAPI 3.0 Specification (`docs/openapi.yaml`)**
+   - Complete API documentation with all 5 CRUD endpoints
+   - Detailed request/response schemas with examples
+   - Comprehensive validation rules and constraints
+   - Multiple response examples (success and error cases)
+   - Health check endpoint documentation
+   - Proper HTTP status codes (200, 201, 204, 400, 404, 500)
+   - Pagination parameters and response structure
+   - Security and server configuration
+
+2. **Swagger UI Integration**
+   - Installed swagger-ui-express and js-yaml dependencies
+   - Integrated Swagger UI at `/api-docs` endpoint
+   - Dynamic loading of OpenAPI specification from YAML file
+   - Error handling for missing specification file
+   - Logging confirmation when Swagger UI is available
+
+3. **Comprehensive README.md**
+   - Project overview with feature list
+   - Installation and setup instructions
+   - Quick start guide for development and production
+   - Complete API endpoint documentation with examples
+   - Data model and validation rules
+   - Testing instructions and coverage report
+   - Code quality tools (type checking, linting, formatting)
+   - Project structure overview
+   - Configuration and environment variables
+   - Security features documentation
+   - Logging configuration
+   - Deployment instructions
+   - Contributing guidelines with commit conventions
+   - License and acknowledgments
+
+### Decisions made:
+- Used OpenAPI 3.0.3 specification (latest stable version)
+- Provided multiple examples for each endpoint (success and error cases)
+- Documented all validation rules and constraints
+- Included both development and production server URLs
+- Used YAML format for OpenAPI spec (more readable than JSON)
+- Integrated Swagger UI with error handling for robustness
+- Structured README with clear sections and emojis for better readability
+
+### Issues encountered and resolved:
+None - implementation was straightforward
+
+### Validation:
+- ✅ OpenAPI specification created with complete documentation
+- ✅ Swagger UI successfully integrated at /api-docs
+- ✅ All 100 tests still passing
+- ✅ TypeScript compilation successful (npm run type-check)
+- ✅ ESLint passed with no errors (npm run lint)
+- ✅ README.md provides comprehensive documentation
+- ✅ Git commit created
+
+### Success Criteria Met:
+- ✅ All 5 CRUD endpoints working
+- ✅ Input validation on all endpoints
+- ✅ Proper error handling with HTTP status codes
+- ✅ 90%+ test coverage achieved (96.27%)
+- ✅ **Complete OpenAPI documentation** ✨
+- ✅ **Swagger UI integrated at /api-docs** ✨
+- ✅ **Comprehensive README with setup instructions** ✨
+- ✅ TypeScript strict mode with no errors
+- ✅ Production-ready (logging, security, CORS)
+
+### Next steps:
+- Phase 5: Final validation and polish
+- Verify all success criteria are met
+- Test the complete application end-to-end

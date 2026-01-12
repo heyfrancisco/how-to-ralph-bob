@@ -85,9 +85,9 @@ export class UserService {
     const now = new Date();
     const user: User = {
       id: randomUUID(),
-      email: userData.email,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
+      email: userData.email.trim(),
+      firstName: userData.firstName.trim(),
+      lastName: userData.lastName.trim(),
       age: userData.age,
       createdAt: now,
       updatedAt: now,
@@ -102,8 +102,8 @@ export class UserService {
    * @param id - User ID
    * @returns User if found, undefined otherwise
    */
-  findUserById(id: string): UserResponse | undefined {
-    return this.store.get(id);
+  findUserById(id: string): UserResponse | null {
+    return this.store.get(id) || null;
   }
 
   /**
@@ -144,16 +144,31 @@ export class UserService {
    * @param updateData - Fields to update
    * @returns Updated user if found, undefined otherwise
    */
-  updateUser(id: string, updateData: UpdateUserDto): UserResponse | undefined {
+  updateUser(id: string, updateData: UpdateUserDto): UserResponse | null {
     const existingUser = this.store.get(id);
     
     if (!existingUser) {
-      return undefined;
+      return null;
+    }
+
+    // Trim string fields if provided
+    const trimmedData: UpdateUserDto = {};
+    if ('email' in updateData) {
+      trimmedData.email = updateData.email?.trim();
+    }
+    if ('firstName' in updateData) {
+      trimmedData.firstName = updateData.firstName?.trim();
+    }
+    if ('lastName' in updateData) {
+      trimmedData.lastName = updateData.lastName?.trim();
+    }
+    if ('age' in updateData) {
+      trimmedData.age = updateData.age;
     }
 
     const updatedUser: User = {
       ...existingUser,
-      ...updateData,
+      ...trimmedData,
       updatedAt: new Date(),
     };
 

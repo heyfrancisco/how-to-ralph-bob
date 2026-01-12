@@ -2,58 +2,34 @@
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Core Philosophy](#core-philosophy)
-3. [How It Works](#how-it-works)
-4. [Implementation with Bob-Shell](#implementation-with-bob-shell)
-5. [The Ralph Loop Script](#the-ralph-loop-script)
-6. [Prompt Engineering](#prompt-engineering)
-7. [Best Practices](#best-practices)
-8. [Advanced Patterns](#advanced-patterns)
-9. [Troubleshooting](#troubleshooting)
-10. [Examples](#examples)
-11. [Comparison: Traditional vs Ralph](#comparison-traditional-vs-ralph)
-12. [Tips for Success](#tips-for-success)
+2. [How It Works](#how-it-works)
+3. [Implementation with Bob-Shell](#implementation-with-bob-shell)
+4. [The Ralph Loop Script](#the-ralph-loop-script)
+5. [Prompt Engineering](#prompt-engineering)
+6. [Best Practices](#best-practices)
+7. [Troubleshooting](#troubleshooting)
+8. [Examples](#examples)
+9. [Comparison: Traditional vs Ralph](#comparison-traditional-vs-ralph)
+10. [Tips for Success](#tips-for-success)
 
 ---
 
 ## Introduction
 
-The **Ralph Wiggum Technique** is a revolutionary AI methodology that simplifies complex software development workflows by embracing a single, powerful principle:
-
-> **"Ralph simplifies everything."**
-
-Instead of crafting elaborate, phase-specific prompts for each stage of development, you run the **same prompt in a loop**, allowing the AI to self-organize, prioritize, and execute tasks autonomously.
+The **Ralph Wiggum Technique** is a AI methodology that runs agents in a continuous loop with a **single prompt**, allowing the AI to self-organize, prioritize, and execute tasks autonomously. This approach eliminates the need for phase-specific prompts and lets the AI work naturally through iterative cycles.
 
 Named after the beloved Simpsons character known for his simple yet profound observations, this technique strips away complexity and lets the AI agent work naturally through iterative cycles.
 
-### Why Ralph Wiggum?
+Each iteration:
+- Looks at a plan file to see what needs to be done
+- Looks at a progress file to see what has already been done
+- Decides what to do next
+- Explores the codebase
+- Implements the feature
+- Runs feedback loops (types, linting, tests)
+- Commits the code
 
-Ralph Wiggum's character embodies simplicity and unexpected wisdom. Similarly, this technique:
-- **Simplifies** complex workflows into a single repeating pattern
-- **Trusts** the AI's judgment for task prioritization
-- **Iterates** naturally without rigid phase structures
-- **Delivers** results through consistent, focused execution
-
----
-
-## Core Philosophy
-
-### The Three Pillars
-
-1. **Single Prompt, Multiple Iterations**
-   - One well-crafted prompt runs repeatedly
-   - No phase-specific prompt engineering required
-   - Consistency across all iterations
-
-2. **AI-Driven Prioritization**
-   - The AI decides which task to tackle next
-   - Priority is based on dependencies, complexity, and logical flow
-   - Human intervention only when needed
-
-3. **Feedback Loop Integration**
-   - Each iteration checks its own work (tests, types, linting)
-   - Progress is tracked and committed
-   - Self-correcting through continuous validation
+The key improvement here is that the **agent chooses the task, not you.**
 
 ---
 
@@ -638,28 +614,12 @@ bob "Add documentation"
 bob "Final review"
 ```
 
-**Problems:**
-- 10+ different prompts to write
-- Manual phase management
-- Easy to forget steps
-- No automatic prioritization
-- Requires constant human oversight
-
 ### Ralph Approach
 
 ```bash
 # One script, one prompt, automatic execution
 ./ralph.sh 15
 ```
-
-**Benefits:**
-- Single prompt to maintain
-- AI handles prioritization
-- Automatic validation
-- Self-documenting progress
-- Minimal human intervention
-- Consistent execution
-
 ---
 
 ## Tips for Success
@@ -693,4 +653,3 @@ bob "Final review"
 
 **Version:** 1.0.0  
 **Last Updated:** January 2026  
-**License:** MIT
